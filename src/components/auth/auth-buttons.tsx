@@ -11,8 +11,14 @@ export function AuthButtons() {
   const { data: session, isPending, error } = authClient.useSession();
 
   function signOut() {
-    authClient.signOut();
-    router.push("/");
+    authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/auth/login");
+          router.refresh();
+        },
+      },
+    });
   }
 
   if (isPending) {

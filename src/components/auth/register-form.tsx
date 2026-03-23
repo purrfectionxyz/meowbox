@@ -9,6 +9,8 @@ import { Button } from "../ui/button";
 import { authClient } from "~/server/auth/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Spinner } from "../ui/spinner";
+import { useState } from "react";
 
 export const registerFormSchema = z
   .object({
@@ -25,6 +27,8 @@ export const registerFormSchema = z
 export type RegisterFormData = z.infer<typeof registerFormSchema>;
 
 export function RegisterForm() {
+  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema),
@@ -37,6 +41,8 @@ export function RegisterForm() {
   });
 
   async function onSubmit(values: RegisterFormData) {
+    setLoading(true);
+
     const { data, error } = await authClient.signUp.email({
       email: values.email,
       name: values.username,
@@ -46,13 +52,15 @@ export function RegisterForm() {
     });
 
     if (error) {
-      toast.error("Something went wrong! Please try again later.");
+      setLoading(false);
+      toast.error(error.message);
       console.error(error);
       return;
     }
 
     router.push("/dash");
     toast.success("Registered successfully :)");
+    setLoading(false);
   }
 
   return (
@@ -143,7 +151,9 @@ export function RegisterForm() {
         />
       </FieldGroup>
 
-      <Button type="submit">Register</Button>
+      <Button type="submit" disabled={loading}>
+        {loading ? <Spinner /> : "Register"}
+      </Button>
     </form>
   );
 }
