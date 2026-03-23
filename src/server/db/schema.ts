@@ -9,8 +9,6 @@ import {
   varchar,
 } from "drizzle-orm/mysql-core";
 
-export const createTable = mysqlTableCreator((name) => `mb_${name}`);
-
 export const user = mysqlTable("user", {
   id: varchar("id", { length: 36 }).primaryKey(),
   name: text("name").notNull(),
@@ -21,6 +19,8 @@ export const user = mysqlTable("user", {
 
   username: varchar("username", { length: 255 }).unique(),
   displayUsername: text("display_username"),
+
+  bio: varchar("bio", { length: 100 }),
 
   image: text("image"),
   createdAt: timestamp("created_at")
@@ -75,6 +75,46 @@ export const verification = mysqlTable("verification", {
   ),
 });
 
+// DRAWBOX STUFF
+export const drawing = mysqlTable(
+  "drawing",
+  (t) => ({
+    id: t.varchar("id", { length: 36 }).primaryKey(),
+    userId: t.varchar("user_id", { length: 36 }).references(() => user.id),
+
+    type: t.varchar("type", { length: 20 }).notNull(),
+
+    image: t.text("image").notNull(),
+    text: t.text("text"),
+
+    isApproved: t.boolean("is_approved").default(false),
+
+    ipHash: t.varchar("ip_hash", { length: 255 }).notNull(),
+    userAgent: t.text("user_agent"),
+
+    createdAt: t.timestamp("created_at").defaultNow().notNull(),
+    deletedAt: t.timestamp("deleted_at"),
+  }),
+  (t) => [
+    index("user_idx").on(t.userId),
+    index("ip_idx").on(t.ipHash),
+    index("created_idx").on(t.createdAt),
+  ],
+);
+
+export const userStyles = mysqlTable("user_style", (t) => ({
+  id: t
+    .varchar("id", { length: 36 })
+    .notNull()
+    .primaryKey()
+    .references(() => user.id),
+  styles: t.json("styles").$type<StylesType>(),
+}));
+export type StylesType = {
+  background: string;
+  foreground: string;
+};
+
 export const usersRelations = relations(user, ({ many }) => ({
   accounts: many(account),
   sessions: many(session),
@@ -86,4 +126,8 @@ export const accountsRelations = relations(account, ({ one }) => ({
 
 export const sessionsRelations = relations(session, ({ one }) => ({
   user: one(user, { fields: [session.userId], references: [user.id] }),
+}));
+
+export const drawingRelations = relations(drawing, ({ one }) => ({
+  user: one(user, { fields: [drawing.userId], references: [user.id] }),
 }));
