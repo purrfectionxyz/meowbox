@@ -1,3 +1,10 @@
+import { AuthButtons } from "~/components/auth/auth-buttons";
+
 export default async function DashboardPage() {
-  return <p>dashboard</p>;
+  return (
+    <div>
+      <h1>Dashboard</h1>
+      <AuthButtons />
+    </div>
+  );
 }
