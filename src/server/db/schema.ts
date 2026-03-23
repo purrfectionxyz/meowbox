@@ -11,27 +11,6 @@ import {
 
 export const createTable = mysqlTableCreator((name) => `mb_${name}`);
 
-export const posts = createTable(
-  "post",
-  (d) => ({
-    id: d.bigint({ mode: "number" }).primaryKey().autoincrement(),
-    name: d.varchar({ length: 256 }),
-    createdById: d
-      .varchar({ length: 255 })
-      .notNull()
-      .references(() => user.id),
-    createdAt: d
-      .timestamp()
-      .$defaultFn(() => /* @__PURE__ */ new Date())
-      .notNull(),
-    updatedAt: d.timestamp().onUpdateNow(),
-  }),
-  (t) => [
-    index("created_by_idx").on(t.createdById),
-    index("name_idx").on(t.name),
-  ],
-);
-
 export const user = mysqlTable("user", {
   id: varchar("id", { length: 36 }).primaryKey(),
   name: text("name").notNull(),
@@ -39,6 +18,10 @@ export const user = mysqlTable("user", {
   emailVerified: boolean("email_verified")
     .$defaultFn(() => false)
     .notNull(),
+
+  username: varchar("username", { length: 255 }).unique(),
+  displayUsername: text("display_username"),
+
   image: text("image"),
   createdAt: timestamp("created_at")
     .$defaultFn(() => /* @__PURE__ */ new Date())
