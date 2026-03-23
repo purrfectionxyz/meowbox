@@ -1,6 +1,11 @@
 import { notFound } from "next/navigation";
 import type React from "react";
-import { getUserByName, getUserStyles } from "~/server/db/queries";
+import DrawBox from "~/components/drawbox";
+import {
+  getUserByName,
+  getUserDrawings,
+  getUserStyles,
+} from "~/server/db/queries";
 
 export default async function UserPage({
   params,
@@ -15,6 +20,7 @@ export default async function UserPage({
     return notFound();
   }
 
+  const userDrawings = await getUserDrawings(user.id, 10);
   const userStyles = await getUserStyles(user.id);
 
   return (
@@ -25,10 +31,32 @@ export default async function UserPage({
           "--fg": userStyles.foreground,
         } as React.CSSProperties
       }
-      className="mx-auto max-w-md bg-(--bg) px-4 py-4 text-(--fg)"
+      className="divide-border mx-auto max-w-md divide-y divide-solid bg-(--bg) px-4 py-4 text-(--fg)"
     >
-      <h1 className="text-2xl">{user.name}</h1>
-      <p>bio....</p>
+      <div className="pb-4">
+        <h1 className="text-2xl">@{user.name}</h1>
+        <p>{user.bio}</p>
+      </div>
+
+      <div className="py-4">
+        <DrawBox userId={user.id} />
+      </div>
+
+      <div className="py-4">
+        <h2 className="text-xl">Recent Drawings</h2>
+        <div className="flex flex-col divide-y">
+          {userDrawings.map((drawing) => (
+            <div className="py-2" key={drawing.id}>
+              <img src={drawing.image} />
+              <p className="text-xs">
+                Created At:{" "}
+                {new Date(drawing.createdAt).toLocaleDateString("en-GB")}
+              </p>
+            </div>
+          ))}
+          {userDrawings.length === 0 && <p>No drawings.</p>}
+        </div>
+      </div>
     </div>
   );
 }

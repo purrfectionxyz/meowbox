@@ -82,10 +82,7 @@ export const drawing = mysqlTable(
     id: t.varchar("id", { length: 36 }).primaryKey(),
     userId: t.varchar("user_id", { length: 36 }).references(() => user.id),
 
-    type: t.varchar("type", { length: 20 }).notNull(),
-
     image: t.text("image").notNull(),
-    text: t.text("text"),
 
     isApproved: t.boolean("is_approved").default(false),
 

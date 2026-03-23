@@ -21,3 +21,10 @@ export async function getUserStyles(id: string): Promise<StylesType> {
 
   return styles;
 }
+
+export async function getUserDrawings(userId: string, max?: number) {
+  return await db.query.drawing.findMany({
+    where: (t, { eq }) => eq(t.userId, userId) && eq(t.isApproved, true),
+    limit: max,
+  });
+}

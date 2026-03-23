@@ -1,12 +1,14 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { submitDrawing } from "~/actions/submit-drawing";
 import { useDrawBox } from "~/hooks/useDrawBox";
+import { Button } from "./ui/button";
+import { useState } from "react";
+import { Spinner } from "./ui/spinner";
 
-export default function DrawBox({
-  onSubmit,
-}: {
-  onSubmit?: (img: string) => void;
-}) {
+export default function DrawBox({ userId }: { userId: string }) {
   const {
     canvasRef,
     startDrawing,
@@ -19,6 +21,30 @@ export default function DrawBox({
     size,
     setSize,
   } = useDrawBox();
+
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
+
+  async function onSubmit() {
+    setLoading(true);
+
+    const img = getImage();
+
+    console.log(img);
+
+    const res = await submitDrawing(userId, img);
+
+    if (!res.success) {
+      toast.error(res.message);
+      setLoading(false);
+      return;
+    }
+
+    toast.success(res.message);
+    clear();
+    setLoading(false);
+  }
 
   return (
     <div className="space-y-3">
@@ -54,9 +80,13 @@ export default function DrawBox({
       />
 
       {/* 🔘 Actions */}
-      <div className="flex gap-2">
-        <button onClick={clear}>Clear</button>
-        <button onClick={() => onSubmit?.(getImage())}>Submit</button>
+      <div className="flex gap-1">
+        <Button onClick={clear} disabled={loading}>
+          Clear
+        </Button>
+        <Button onClick={async () => await onSubmit()} disabled={loading}>
+          {loading ? <Spinner /> : "Submit"}
+        </Button>
       </div>
     </div>
   );

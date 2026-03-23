@@ -12,6 +12,15 @@ export const auth = betterAuth({
     enabled: true,
   },
   plugins: [nextCookies(), username()],
+  user: {
+    additionalFields: {
+      bio: {
+        type: "string",
+        required: false,
+        defaultValue: "this user has not set a bio :3",
+      },
+    },
+  },
 });
 
 export type Session = typeof auth.$Infer.Session;
