@@ -31,30 +31,30 @@ export default async function UserPage({
           "--fg": userStyles.foreground,
         } as React.CSSProperties
       }
-      className="divide-border mx-auto max-w-md divide-y divide-solid bg-(--bg) px-4 py-4 text-(--fg)"
+      className="bg-(--bg) text-(--fg)"
     >
-      <div className="pb-4">
-        <h1 className="text-2xl">@{user.name}</h1>
-        <p>{user.bio}</p>
-      </div>
-
-      <div className="py-4">
-        <DrawBox userId={user.id} />
-      </div>
-
-      <div className="py-4">
-        <h2 className="text-xl">Recent Drawings</h2>
-        <div className="flex flex-col divide-y">
-          {userDrawings.map((drawing) => (
-            <div className="py-2" key={drawing.id}>
-              <img src={drawing.image} />
-              <p className="text-xs">
-                Created At:{" "}
-                {new Date(drawing.createdAt).toLocaleDateString("en-GB")}
-              </p>
-            </div>
-          ))}
-          {userDrawings.length === 0 && <p>No drawings.</p>}
+      <div className="divide-border mx-auto max-w-md divide-y divide-solid px-4 py-4">
+        <div className="pb-4">
+          <h1 className="text-2xl">@{user.name}</h1>
+          <p>{user.bio}</p>
+        </div>
+        <div className="py-4">
+          <DrawBox userId={user.id} />
+        </div>
+        <div className="py-4">
+          <h2 className="text-xl">Recent Drawings</h2>
+          <div className="flex flex-col divide-y">
+            {userDrawings.reverse().map((drawing) => (
+              <div className="py-2" key={drawing.id}>
+                <img className="rounded-xl bg-white" src={drawing.image} />
+                <p className="text-xs">
+                  Created At:{" "}
+                  {new Date(drawing.createdAt).toLocaleDateString("en-GB")}
+                </p>
+              </div>
+            ))}
+            {userDrawings.length === 0 && <p>No drawings.</p>}
+          </div>
         </div>
       </div>
     </div>
