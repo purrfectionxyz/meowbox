@@ -6,6 +6,9 @@ import { Controller, useForm } from "react-hook-form";
 import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { authClient } from "~/server/auth/client";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export const registerFormSchema = z
   .object({
@@ -22,6 +25,7 @@ export const registerFormSchema = z
 export type RegisterFormData = z.infer<typeof registerFormSchema>;
 
 export function RegisterForm() {
+  const router = useRouter();
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
@@ -32,8 +36,23 @@ export function RegisterForm() {
     },
   });
 
-  async function onSubmit(data: RegisterFormData) {
-    console.log(data);
+  async function onSubmit(values: RegisterFormData) {
+    const { data, error } = await authClient.signUp.email({
+      email: values.email,
+      name: values.username,
+      password: values.password,
+      username: values.username,
+      displayUsername: values.username,
+    });
+
+    if (error) {
+      toast.error("Something went wrong! Please try again later.");
+      console.error(error);
+      return;
+    }
+
+    router.push("/dash");
+    toast.success("Registered successfully :)");
   }
 
   return (
