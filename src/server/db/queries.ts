@@ -5,19 +5,23 @@ import type { StylesType } from "./schema";
 
 export async function getUserByName(username: string) {
   return await db.query.user.findFirst({
-    where: (t, { eq }) => eq(t.username, username),
+    where: {
+      username,
+    },
   });
 }
 
 export async function getUserStyles(id: string): Promise<StylesType> {
   const response = await db.query.userStyles.findFirst({
-    where: (t, { eq }) => eq(t.id, id),
+    where: {
+      id,
+    },
   });
 
   const styles: StylesType = response?.styles ?? {
     background: "#fff",
     foreground: "#000",
-    font: "sans",
+    font: "Geist",
   };
 
   return styles;
@@ -25,7 +29,13 @@ export async function getUserStyles(id: string): Promise<StylesType> {
 
 export async function getUserDrawings(userId: string, max?: number) {
   return await db.query.drawing.findMany({
-    where: (t, { eq }) => eq(t.userId, userId) && eq(t.isApproved, true),
+    where: {
+      userId,
+      isApproved: true,
+    },
     limit: max,
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 }

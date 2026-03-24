@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm";
+import { defineRelations } from "drizzle-orm";
 import {
   boolean,
   index,
@@ -7,6 +7,7 @@ import {
   text,
   timestamp,
   varchar,
+  blob,
 } from "drizzle-orm/mysql-core";
 
 export const user = mysqlTable("user", {
@@ -82,7 +83,7 @@ export const drawing = mysqlTable(
     id: t.varchar("id", { length: 36 }).primaryKey(),
     userId: t.varchar("user_id", { length: 36 }).references(() => user.id),
 
-    image: t.text("image").notNull(),
+    image: t.blob("image").notNull(),
 
     isApproved: t.boolean("is_approved").default(false),
 
@@ -112,20 +113,3 @@ export type StylesType = {
   foreground: string;
   font: "Geist" | "Nunito Sans" | "Times New Roman";
 };
-
-export const usersRelations = relations(user, ({ many }) => ({
-  accounts: many(account),
-  sessions: many(session),
-}));
-
-export const accountsRelations = relations(account, ({ one }) => ({
-  user: one(user, { fields: [account.userId], references: [user.id] }),
-}));
-
-export const sessionsRelations = relations(session, ({ one }) => ({
-  user: one(user, { fields: [session.userId], references: [user.id] }),
-}));
-
-export const drawingRelations = relations(drawing, ({ one }) => ({
-  user: one(user, { fields: [drawing.userId], references: [user.id] }),
-}));
