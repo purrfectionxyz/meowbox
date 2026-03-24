@@ -8,6 +8,17 @@ import { Button } from "./ui/button";
 import { useState } from "react";
 import { Spinner } from "./ui/spinner";
 
+function isCanvasBlank(canvas: HTMLCanvasElement) {
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return true;
+
+  const pixelBuffer = new Uint32Array(
+    ctx.getImageData(0, 0, canvas.width, canvas.height).data.buffer,
+  );
+
+  return !pixelBuffer.some((color) => color !== 0);
+}
+
 export default function DrawBox({ userId }: { userId: string }) {
   const {
     canvasRef,
@@ -32,6 +43,12 @@ export default function DrawBox({ userId }: { userId: string }) {
     const img = getImage();
 
     console.log(img);
+
+    if (isCanvasBlank(canvasRef.current!)) {
+      toast.error("Please actually draw something T-T");
+      setLoading(false);
+      return;
+    }
 
     const res = await submitDrawing(userId, img);
 
