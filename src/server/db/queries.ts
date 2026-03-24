@@ -17,6 +17,7 @@ export async function getUserStyles(id: string): Promise<StylesType> {
   const styles: StylesType = response?.styles ?? {
     background: "#fff",
     foreground: "#000",
+    font: "sans",
   };
 
   return styles;

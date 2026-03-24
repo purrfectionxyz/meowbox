@@ -110,6 +110,7 @@ export const userStyles = mysqlTable("user_style", (t) => ({
 export type StylesType = {
   background: string;
   foreground: string;
+  font: "Geist" | "Nunito Sans" | "Times New Roman";
 };
 
 export const usersRelations = relations(user, ({ many }) => ({

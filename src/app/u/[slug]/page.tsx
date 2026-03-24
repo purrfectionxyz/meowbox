@@ -29,9 +29,10 @@ export default async function UserPage({
         {
           "--bg": userStyles.background,
           "--fg": userStyles.foreground,
+          "--font": userStyles.font + ", sans-serif",
         } as React.CSSProperties
       }
-      className="bg-(--bg) text-(--fg)"
+      className="bg-(--bg) font-(family-name:--font) text-(--fg)"
     >
       <div className="divide-border mx-auto max-w-md divide-y divide-solid px-4 py-4">
         <div className="pb-4">
