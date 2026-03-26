@@ -18,6 +18,9 @@ export async function submitDrawing(
     return { success: false, message: "Image too large" };
   }
 
+  const base64Data = img.replace(/^data:image\/\w+;base64,/, "");
+  const imageBuffer = Buffer.from(base64Data, "base64");
+
   const headersList = await headers();
 
   const ip =
@@ -32,7 +35,7 @@ export async function submitDrawing(
     await db.insert(drawing).values({
       id: createId(),
       userId,
-      image: img,
+      image: imageBuffer,
       ipHash,
       userAgent,
       isApproved: false,

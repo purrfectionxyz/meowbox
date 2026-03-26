@@ -1,6 +1,9 @@
 import { notFound } from "next/navigation";
 import type React from "react";
 import DrawBox from "~/components/drawbox";
+import { SaveButton } from "~/components/save-button";
+import { uint8ToDataUrl } from "~/lib/image";
+
 import {
   getUserByName,
   getUserDrawings,
@@ -32,7 +35,7 @@ export default async function UserPage({
           "--font": userStyles.font + ", sans-serif",
         } as React.CSSProperties
       }
-      className="bg-(--bg) font-(family-name:--font) text-(--fg)"
+      className="h-full min-h-screen bg-(--bg) font-(family-name:--font) text-(--fg)"
     >
       <div className="divide-border mx-auto max-w-md divide-y divide-solid px-4 py-4">
         <div className="pb-4">
@@ -45,15 +48,25 @@ export default async function UserPage({
         <div className="py-4">
           <h2 className="text-xl">Recent Drawings</h2>
           <div className="flex flex-col divide-y">
-            {userDrawings.reverse().map((drawing) => (
-              <div className="py-2" key={drawing.id}>
-                <img className="rounded-xl bg-white" src={drawing.image} />
-                <p className="text-xs">
-                  Created At:{" "}
-                  {new Date(drawing.createdAt).toLocaleDateString("en-GB")}
-                </p>
-              </div>
-            ))}
+            {userDrawings.map((drawing) => {
+              const imageEncoded = uint8ToDataUrl(drawing.image);
+
+              return (
+                <div
+                  className="flex flex-col justify-center py-2"
+                  key={drawing.id}
+                >
+                  <img className="rounded-xl bg-white" src={imageEncoded} />
+                  <div className="flex items-center justify-between pt-2">
+                    <p className="text-xs">
+                      Created At:{" "}
+                      {new Date(drawing.createdAt).toLocaleDateString("en-GB")}
+                    </p>
+                    <SaveButton image={imageEncoded} />
+                  </div>
+                </div>
+              );
+            })}
             {userDrawings.length === 0 && <p>No drawings.</p>}
           </div>
         </div>

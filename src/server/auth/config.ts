@@ -4,9 +4,12 @@ import { db } from "../db";
 import { nextCookies } from "better-auth/next-js";
 import { username } from "better-auth/plugins";
 
+import * as schema from "~/server/db/schema";
+
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "mysql",
+    schema,
   }),
   emailAndPassword: {
     enabled: true,
