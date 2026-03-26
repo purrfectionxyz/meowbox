@@ -13,7 +13,10 @@ import { useState } from "react";
 import { Spinner } from "../ui/spinner";
 
 export const loginFormSchema = z.object({
-  username: z.string().max(25),
+  username: z
+    .string()
+    .min(3, { message: "Min 3 characters" })
+    .max(25, { message: "Max 25 characters" }),
   password: z.string().min(8, { message: "Must be at least 8 characters" }),
 });
 

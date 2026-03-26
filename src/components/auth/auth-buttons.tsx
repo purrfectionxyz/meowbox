@@ -15,7 +15,6 @@ export function AuthButtons() {
       fetchOptions: {
         onSuccess: () => {
           router.push("/auth/login");
-          router.refresh();
         },
       },
     });
@@ -37,9 +36,5 @@ export function AuthButtons() {
     );
   }
 
-  return (
-    <form onSubmit={() => signOut()}>
-      <Button>Logout</Button>
-    </form>
-  );
+  return <Button onClick={signOut}>Logout</Button>;
 }

@@ -14,7 +14,10 @@ import { useState } from "react";
 
 export const registerFormSchema = z
   .object({
-    username: z.string().max(25),
+    username: z
+      .string()
+      .min(3, { message: "Min 3 characters" })
+      .max(25, { message: "Max 25 characters" }),
     email: z.string().email({ message: "Invalid email address" }),
     password: z.string().min(8, { message: "Must be at least 8 characters" }),
     confirmPassword: z.string(),

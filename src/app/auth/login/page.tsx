@@ -12,7 +12,13 @@ import {
 
 export default async function LoginPage() {
   return (
-    <div className="py-12">
+    <div>
+      <div className="py-12 text-center">
+        <h1 className="text-2xl font-semibold">meowbox</h1>
+        <Button variant="link" asChild>
+          <Link href="/">Back Home</Link>
+        </Button>
+      </div>
       <Card className="mx-auto max-w-md">
         <CardHeader>
           <CardTitle>Login to meowbox</CardTitle>
