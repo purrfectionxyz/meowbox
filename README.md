@@ -5,3 +5,13 @@
 
 meowbox is a free, straw.page inspired embeddable drawbox for use on your
 websites. it is currently heavily under development and not stable for use.
+
+## current features
+
+- drawbox submission
+- custom themes
+
+## todo
+
+- user dashboard (settings, approval, etc)
+- iframe/embed for sites
