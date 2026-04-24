@@ -6,7 +6,11 @@ import { Spinner } from "../ui/spinner";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export function AuthButtons() {
+export function AuthButtons({
+  extraLink,
+}: {
+  extraLink?: { href: string; text: string };
+}) {
   const router = useRouter();
   const { data: session, isPending, error } = authClient.useSession();
 
@@ -36,5 +40,14 @@ export function AuthButtons() {
     );
   }
 
-  return <Button onClick={signOut}>Logout</Button>;
+  return (
+    <>
+      {extraLink && (
+        <Button asChild>
+          <Link href={extraLink.href}>{extraLink.text}</Link>
+        </Button>
+      )}
+      <Button onClick={signOut}>Logout</Button>
+    </>
+  );
 }

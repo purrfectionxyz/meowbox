@@ -1,4 +1,4 @@
-import { defineRelations } from "drizzle-orm";
+import { defineRelations, type InferSelectModel } from "drizzle-orm";
 import {
   boolean,
   index,
@@ -99,6 +99,7 @@ export const drawing = mysqlTable(
     index("created_idx").on(t.createdAt),
   ],
 );
+export type Drawing = InferSelectModel<typeof drawing>;
 
 export const userStyles = mysqlTable("user_style", (t) => ({
   id: t

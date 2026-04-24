@@ -39,3 +39,16 @@ export async function getUserDrawings(userId: string, max?: number) {
     },
   });
 }
+
+export async function getUserPendingDrawings(userId: string, max?: number) {
+  return await db.query.drawing.findMany({
+    where: {
+      userId,
+      isApproved: false,
+    },
+    limit: max,
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+}
