@@ -13,5 +13,6 @@ websites. it is currently heavily under development and not stable for use.
 
 ## todo
 
-- user dashboard (settings, approval, etc)
-- iframe/embed for sites
+- user dashboard (reporting, profile settings, etc)
+- reporting system
+- iframe/embed for sites (for the drawbox & to get drawings)
