@@ -17,5 +17,6 @@ Drizzle ORM, and a MySQL database.
 ## todo
 
 - user dashboard (reporting, profile settings, etc)
+- staff accounts & moderation
 - reporting system
 - iframe/embed for sites (for the drawbox & to get drawings)
