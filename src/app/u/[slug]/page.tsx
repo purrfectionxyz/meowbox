@@ -46,9 +46,15 @@ export default async function UserPage({
         </nav>
       </header>
       <div className="mx-auto max-w-md px-4">
-        <div className="pb-2">
-          <h1 className="text-2xl">@{user.name}</h1>
-          <p>{user.bio}</p>
+        <div className="flex flex-row gap-2 pb-2">
+          {user.image && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={user.image} alt="Profile picture" className="max-w-25" />
+          )}
+          <div>
+            <h1 className="text-2xl">@{user.name}</h1>
+            <p>{user.bio}</p>
+          </div>
         </div>
         <div className="py-2">
           <DrawBox userId={user.id} />
