@@ -65,7 +65,21 @@ export function useDrawBox() {
   };
 
   const getImage = () => {
-    return canvasRef.current!.toDataURL("image/png");
+    const canvas = canvasRef.current!;
+
+    const tempCanvas = document.createElement("canvas");
+    tempCanvas.width = canvas.width;
+    tempCanvas.height = canvas.height;
+    const tempCtx = tempCanvas.getContext("2d")!;
+
+    // Draw white background first
+    tempCtx.fillStyle = "#ffffff";
+    tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+    // Draw original canvas on top
+    tempCtx.drawImage(canvas, 0, 0);
+
+    return tempCanvas.toDataURL("image/jpeg", 0.8);
   };
 
   return {
